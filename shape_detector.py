@@ -19,14 +19,24 @@ def put_japanese_text(img, text, position, font_size=20, color=(255, 255, 255)):
     img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     draw = ImageDraw.Draw(img_pil)
     
-    # フォントを読み込み（Windowsの標準日本語フォント）
+    # フォントを読み込み(macOS/Windows対応)
     try:
-        font = ImageFont.truetype("C:/Windows/Fonts/msgothic.ttc", font_size)
+        # macOSの標準日本語フォント
+        font = ImageFont.truetype("/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc", font_size)
     except:
         try:
-            font = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", font_size)
+            # macOSの代替フォント
+            font = ImageFont.truetype("/System/Library/Fonts/ヒラギノ丸ゴ ProN W4.ttc", font_size)
         except:
-            font = ImageFont.truetype("arial.ttf", font_size)
+            try:
+                # Windowsの標準日本語フォント
+                font = ImageFont.truetype("C:/Windows/Fonts/msgothic.ttc", font_size)
+            except:
+                try:
+                    font = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", font_size)
+                except:
+                    # デフォルトフォント(日本語非対応)
+                    font = ImageFont.load_default()
     
     # RGBに変換（PILはRGB）
     color_rgb = (color[2], color[1], color[0])

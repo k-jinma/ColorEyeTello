@@ -61,10 +61,7 @@ def detect_shape(contour):
     
     vertices = len(approx)
     
-    # 頂点数で形状を判定
-    if vertices == 3:
-        return "triangle", vertices
-    elif vertices == 4:
+    if vertices == 4:
         # 矩形の場合、正方形か長方形かを判定
         x, y, w, h = cv2.boundingRect(approx)
         aspect_ratio = float(w) / h
@@ -72,16 +69,28 @@ def detect_shape(contour):
             return "square", vertices
         else:
             return "rectangle", vertices
-    elif vertices == 5:
-        return "pentagon", vertices
-    elif vertices > 5:
-        # 円形の判定（頂点が多い場合）
-        area = cv2.contourArea(contour)
-        circularity = 4 * np.pi * area / (perimeter * perimeter)
-        if circularity > 0.8:
-            return "circle", vertices
-        else:
-            return "polygon", vertices
+    
+    # # 頂点数で形状を判定
+    # if vertices == 3:
+    #     return "triangle", vertices
+    # elif vertices == 4:
+    #     # 矩形の場合、正方形か長方形かを判定
+    #     x, y, w, h = cv2.boundingRect(approx)
+    #     aspect_ratio = float(w) / h
+    #     if 0.95 <= aspect_ratio <= 1.05:
+    #         return "square", vertices
+    #     else:
+    #         return "rectangle", vertices
+    # elif vertices == 5:
+    #     return "pentagon", vertices
+    # elif vertices > 5:
+    #     # 円形の判定（頂点が多い場合）
+    #     area = cv2.contourArea(contour)
+    #     circularity = 4 * np.pi * area / (perimeter * perimeter)
+    #     if circularity > 0.8:
+    #         return "circle", vertices
+    #     else:
+    #         return "polygon", vertices
     else:
         return "unknown", vertices
 
@@ -89,9 +98,8 @@ def detect_shape(contour):
 
 # 検出の閾値
 MIN_AREA = 500  # この面積以上の領域を検出
-CANNY_THRESHOLD1 = 50  # Cannyエッジ検出の閾値1
-CANNY_THRESHOLD2 = 150  # Cannyエッジ検出の閾値2
-
+CANNY_THRESHOLD1 = 30  # Cannyエッジ検出の閾値1　 １　１
+CANNY_THRESHOLD2 = 90  # Cannyエッジ検出の閾値2　２　３
 tello = Tello(retry_count=1)
 print("Attempting to connect to Tello...")
 
